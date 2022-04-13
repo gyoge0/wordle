@@ -11,6 +11,7 @@ class Game {
         this.yellows = 0;
         this.grays = 0;
         this.finished = false;
+        this.isWon = false
 
         this.colorBox = [];
     }
@@ -94,6 +95,7 @@ class Game {
             this.getCurrentBox().style.color = "darkgray";
             this.select()
         } else if (letter === "ent") {
+            console.log(this.row);
             const guess = this
                 .boxes
                 .slice(
@@ -118,40 +120,68 @@ class Game {
 
             if (correct === guess) {
                 this.deselect()
-                for (let i = 0; i < guess.length; i++) {
+                for (let i = 0; i < 5; i++) {
                     this.boxes[this.row * 5 + i].style.backgroundColor = "#00c735";
                 }
                 this.greens += 5;
-                this.row++;
                 this.col = 0;
                 this.colorBox.push([2, 2, 2, 2, 2])
+                this.isWon = true;
                 this.finish()
             } else {
                 this.deselect()
 
-                const letters = {}
                 const colors = [-1, -1, -1, -1, -1]
-                for (let correctElement of correct) {
-                    letters[correctElement] = letters[correctElement] ? letters[correctElement] + 1 : 1;
+                const isCorrect = [false, false, false, false, false]
+                const letters = {}
+
+                for (let i = 0; i < guess.length; i++) {
+                    if (guess[i] === correct[i]) {
+                        document.getElementById("key".concat(guess[i].toLowerCase())).style.backgroundColor = "#00c735";
+                        this.boxes[this.row * 5 + i].style.backgroundColor = "#00c735";
+                        colors[i] = 2;
+                        isCorrect[i] = true;
+                    }
+                }
+
+                for (let i = 0; i < correct.length; i++) {
+                    if (!isCorrect[i]) {
+                        letters.hasOwnProperty(correct[i]) ? letters[correct[i]]++ : letters[correct[i]] = 1
+                    }
                 }
                 for (let i = 0; i < guess.length; i++) {
-                    if (!(letters[guess[i]] >= 1 && guess[i] !== correct[i]) && (guess[i] !== correct[i])) {
-                        colors[i] = 0;
-                        this.boxes[this.row * 5 + i].style.backgroundColor = "#636363";
-                        document.getElementById("key".concat(guess[i].toLowerCase())).style.backgroundColor = "#636363";
-                        this.grays++;
-                    } else if (letters[guess[i]] >= 1 && guess[i] !== correct[i]) {
-                        letters[guess[i]]--;
-                        colors[i] = 1;
-                        this.boxes[this.row * 5 + i].style.backgroundColor = "gold";
-                        document.getElementById("key".concat(guess[i].toLowerCase())).style.backgroundColor = "gold";
-                        this.yellows++;
-                    } else if (guess[i] === correct[i]) {
-                        letters[guess[i]]--;
-                        colors[i] = 2;
-                        this.boxes[this.row * 5 + i].style.backgroundColor = "#00c735";
-                        document.getElementById("key".concat(guess[i].toLowerCase())).style.backgroundColor = "#00c735";
-                        this.greens++;
+                    if (!isCorrect[i]) {
+                        if (letters.hasOwnProperty(guess[i]) && letters[guess[i]] > 0) {
+                            colors[i] = 1;
+                            letters[guess[i]]--;
+                            if (document.getElementById("key".concat(guess[i].toLowerCase())).style.backgroundColor !== "#00c735") {
+                                document.getElementById("key".concat(guess[i].toLowerCase())).style.backgroundColor = "gold";
+                            }
+                        } else {
+                            if (document.getElementById("key".concat(guess[i].toLowerCase())).style.backgroundColor !== "#00c735"
+                                && document.getElementById("key".concat(guess[i].toLowerCase())).style.backgroundColor !== "gold"
+                            ) {
+                                document.getElementById("key".concat(guess[i].toLowerCase())).style.backgroundColor = "#636363";
+                            }
+                            colors[i] = 0;
+                        }
+                    }
+                }
+
+                for (let i = 0; i < 5; i++) {
+                    switch (colors[i]) {
+                        case 0:
+                            this.boxes[this.row * 5 + i].style.backgroundColor = "#636363";
+                            this.grays++;
+                            break;
+                        case 1:
+                            this.boxes[this.row * 5 + i].style.backgroundColor = "gold";
+                            this.yellow++;
+                            break;
+                        case 2:
+                            this.boxes[this.row * 5 + i].style.backgroundColor = "#00c735";
+                            this.greens++;
+                            break;
                     }
                 }
 
