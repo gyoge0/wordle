@@ -1,0 +1,33 @@
+@media (any-hover: hover) {
+    .active:hover {
+        transition: 100ms;
+        transform: scale(1.25);
+        cursor: pointer;
+    }
+
+    .view-stats-button:hover, .modal-share:hover, .modal-close:hover {
+        cursor: pointer;
+    }
+
+    .view-stats-button:hover, .modal-share:hover {
+        transition: 100ms;
+    }
+
+    .view-stats-button:hover, .modal-close:hover {
+        transform: scale(1.25);
+    }
+
+    .modal-close:hover {
+        color: gray;
+    }
+
+    .modal-share:hover {
+        transform: scale(1.1);
+    }
+}
+
+@media (-webkit-max-device-pixel-ratio: 1.0) {
+    .letter-key, .special-key {
+        outline: black 1px solid;
+    }
+}
