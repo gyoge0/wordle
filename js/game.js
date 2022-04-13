@@ -107,12 +107,12 @@ class Game {
                 .toLowerCase();
 
             if (guess.includes("+")) {
-                console.log("Not a full word");
+                // console.log("Not a full word");
                 return
             }
 
             if (!validGuesses.has(guess) && !correctGuesses.includes(guess)) {
-                console.log("Not a valid word");
+                // console.log("Not a valid word");
                 return
             }
 
