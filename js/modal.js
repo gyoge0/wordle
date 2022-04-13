@@ -2,7 +2,7 @@ import {game} from "./util.js"
 import {correctGuesses} from "./guesses.js";
 
 const shareGuesses = () => {
-    let shareText = `Wordle ${Math.round((new Date() - new Date("04/10/2022")) / 8.64e7)}: ${game.row}/6\n`
+    let shareText = `Wordle ${Math.round((new Date() - new Date("04/10/2022")) / 8.64e7)}: ${game.isWon ? game.row + 1: "X"}/6\n`
     game.colorBox.forEach(row => {
         shareText += "\n"
         row.forEach(color => {
